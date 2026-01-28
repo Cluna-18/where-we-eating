@@ -54,6 +54,6 @@ https://d2rq26roly0gsc.cloudfront.net
 ### Setup
 
 ```bash
-git clone https://github.com/CLuna-18/where-we-eating.git
+git clone https://github.com/Cluna-18/where-we-eating.git
 cd where-we-eating
 npm install
