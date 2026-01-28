@@ -1,12 +1,59 @@
-# React + Vite
+# Where Do You Want 2 Eat
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + Vite web application that helps users decide where to eat by finding nearby restaurants and using a spinning wheel to make the final choice. Filters allow users to narrow results by service style, price, and distance.
 
-Currently, two official plugins are available:
+**Live Demo (AWS + CloudFront)**  
+https://d2rq26roly0gsc.cloudfront.net
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Location-based restaurant search using the Google Places API
+- Spin-the-wheel decision system
+- Filters for service style, price, and search radius
+- Fast frontend built with React and Vite
+- Secure production setup using HTTPS and restricted API keys
+
+---
+
+## Tech Stack
+
+### Frontend
+- React
+- Vite
+- JavaScript (ES6+)
+- CSS
+
+### APIs
+- Google Places API
+
+### Deployment / Infrastructure
+- AWS S3 (static website hosting)
+- AWS CloudFront (CDN and HTTPS)
+- GitHub (version control)
+
+---
+
+## How It Works
+
+1. The app requests the user’s location (HTTPS required).
+2. Nearby restaurants are fetched using the Google Places API.
+3. Results are filtered based on selected options.
+4. Remaining restaurants are loaded into a spinning wheel.
+5. The wheel is spun to randomly select a restaurant.
+
+---
+
+## Local Development
+
+### Prerequisites
+- Node.js (v18+ recommended)
+- npm
+
+### Setup
+
+```bash
+git clone https://github.com/CLuna-18/where-we-eating.git
+cd where-we-eating
+npm install
