@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 
-const MAX_SEGMENTS = 18;
+const MAX_SEGMENTS = 40; // 👈 increased from 18
 const MAX_LABEL_CHARS = 16;
 
 const SLICE_COLORS = [
@@ -37,33 +37,26 @@ export default function WheelCanvas({ restaurants }) {
     const ctx = canvas?.getContext("2d");
     if (!ctx || !wheel) return;
 
-    // Use Winwheel's computed center (this fixes off-center dot)
     const cx = wheel.centerX;
     const cy = wheel.centerY;
 
-    // Cover the middle cleanly
     ctx.save();
 
-    // White center
     ctx.beginPath();
     ctx.arc(cx, cy, wheel.innerRadius + 2, 0, Math.PI * 2);
     ctx.fillStyle = "#FFFFFF";
     ctx.fill();
 
-    // Soft ring
     ctx.beginPath();
     ctx.arc(cx, cy, wheel.innerRadius + 2, 0, Math.PI * 2);
     ctx.strokeStyle = "rgba(20, 30, 60, 0.18)";
     ctx.lineWidth = 3;
     ctx.stroke();
 
-    // Small centered “bubble dot”
     ctx.beginPath();
     ctx.arc(cx, cy, 6, 0, Math.PI * 2);
     ctx.fillStyle = "rgba(191, 231, 255, 0.95)";
     ctx.fill();
-
-   
 
     ctx.restore();
   };
@@ -72,8 +65,15 @@ export default function WheelCanvas({ restaurants }) {
     if (typeof Winwheel === "undefined" || displayRestaurants.length === 0) return;
 
     const segCount = displayRestaurants.length;
+
+    // 👇 shrink font as segment count increases
     const textFontSize =
-      segCount > 16 ? 11 : segCount > 12 ? 13 : segCount > 8 ? 15 : 18;
+      segCount >= 36 ? 9 :
+      segCount >= 28 ? 10 :
+      segCount >= 22 ? 11 :
+      segCount >= 16 ? 12 :
+      segCount >= 12 ? 13 :
+      segCount >= 8 ? 15 : 18;
 
     const segments = displayRestaurants.map((r, i) => ({
       text: shortenLabel(r.name),
@@ -81,17 +81,18 @@ export default function WheelCanvas({ restaurants }) {
       fillStyle: SLICE_COLORS[i % SLICE_COLORS.length],
     }));
 
+    // 👇 make wheel larger to fit more text
     wheelRef.current = new Winwheel({
       canvasId: "restaurantCanvas",
       numSegments: segCount,
-      outerRadius: 190,
-      innerRadius: 48,
+      outerRadius: 240,
+      innerRadius: 60,
 
       segments,
       textFontSize,
       textOrientation: "horizontal",
       textAlignment: "outer",
-      textMargin: 12,
+      textMargin: 14,
       textFillStyle: "#0B1F2A",
 
       strokeStyle: "rgba(20, 30, 60, 0.35)",
@@ -124,7 +125,6 @@ export default function WheelCanvas({ restaurants }) {
     wheel.stopAnimation(false);
     wheel.rotationAngle = 0;
     wheel.draw();
-    // Redraw center overlay after draw
     drawCenterBubble(wheel);
     wheel.startAnimation();
   };
@@ -155,9 +155,10 @@ export default function WheelCanvas({ restaurants }) {
 
   return (
     <div style={{ textAlign: "center", padding: "1rem" }}>
-      <canvas id="restaurantCanvas" width="400" height="400" />
+      {/* 👇 larger canvas */}
+      <canvas id="restaurantCanvas" width="520" height="520" />
 
-      <button style={{ marginTop: "14px" }} onClick={startSpin}>
+      <button style={{ marginTop: "14px" }} onClick={startSpin} aria-label="Spin the wheel">
         🎯 Spin the Wheel
       </button>
 
@@ -227,4 +228,4 @@ export default function WheelCanvas({ restaurants }) {
       )}
     </div>
   );
-}
+} 

@@ -1,10 +1,11 @@
-
 import { useMemo, useState } from "react";
 import RestaurantList from "./RestaurantList";
 import Filter from "./Filter";
 import WheelCanvas from "./WheelCanvas";
 import useNearbyRestaurants from "./useNearbyRestaurants";
 import "./App.css";
+
+const WHEEL_MAX = 40; 
 
 export default function App() {
   const [category, setCategory] = useState("");
@@ -21,6 +22,12 @@ export default function App() {
     });
   }, [restaurants, category, price]);
 
+  // 👇 keep wheel + list consistent
+  const wheelRestaurants = useMemo(
+    () => filteredRestaurants.slice(0, WHEEL_MAX),
+    [filteredRestaurants]
+  );
+
   return (
     <div className="app-bg">
       <div className="bubble b1" />
@@ -29,11 +36,16 @@ export default function App() {
 
       <div className="container">
         <header className="hero">
-          
-          <h1 className="heroTitle">Where do you want 2 eat<span className="heroBadgeText">
-      <img src="/burgerLogo.png" alt="Icon" 
-      style={{ width: '60px', height: '60px' }} />
-      </span></h1>
+          <h1 className="heroTitle">
+            Where do you want 2 eat
+            <span className="heroBadgeText">
+              <img
+                src="/burgerLogo.png"
+                alt="Icon"
+                style={{ width: "60px", height: "60px" }}
+              />
+            </span>
+          </h1>
           <p className="heroSubtitle">
             Spin the wheel, filter by vibe, and let fate pick tonight's food.
           </p>
@@ -46,7 +58,7 @@ export default function App() {
               <p className="cardMeta">
                 {loading
                   ? "Finding restaurants near you…"
-                  : `${filteredRestaurants.length} match(es) in ${radiusMiles} mile(s)`}
+                  : `${wheelRestaurants.length} option(s) on wheel in ${radiusMiles} mile(s)`}
               </p>
             </div>
 
@@ -60,12 +72,12 @@ export default function App() {
                 <div className="stateBox error">
                   <p>{error}</p>
                 </div>
-              ) : filteredRestaurants.length === 0 ? (
+              ) : wheelRestaurants.length === 0 ? (
                 <div className="stateBox">
                   <p>No matches. Try a bigger radius or fewer filters.</p>
                 </div>
               ) : (
-                <WheelCanvas restaurants={filteredRestaurants} />
+                <WheelCanvas restaurants={wheelRestaurants} />
               )}
             </div>
           </section>
@@ -89,12 +101,12 @@ export default function App() {
               <div className="cardHeader">
                 <h2 className="cardTitle">Nearby picks</h2>
                 <p className="cardMeta">
-                  Showing {filteredRestaurants.length} place(s)
+                  Showing {wheelRestaurants.length} place(s)
                 </p>
               </div>
 
               <div className="listWrap">
-                <RestaurantList restaurants={filteredRestaurants} />
+                <RestaurantList restaurants={wheelRestaurants} />
               </div>
             </section>
           </aside>
