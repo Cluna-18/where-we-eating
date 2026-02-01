@@ -94,7 +94,6 @@ export default function useNearbyRestaurants(radiusMiles = 5) {
       setError("");
 
       try {
-        // ✅ FIX #1:
         // More requests -> more coverage for common chains (coffee, bakery, takeaway, etc.)
         const [
           restaurantsData,
@@ -133,7 +132,17 @@ export default function useNearbyRestaurants(radiusMiles = 5) {
           if (p?.id && !unique.has(p.id)) unique.set(p.id, p);
         }
 
-        const mapped = Array.from(unique.values()).map((place) => ({
+        // ✅ HARD ENFORCE RADIUS (Google can return out-of-radius places when ranking by popularity)
+        const filteredByDistance = Array.from(unique.values()).filter((place) => {
+          const plat = place.location?.latitude;
+          const plng = place.location?.longitude;
+          if (typeof plat !== "number" || typeof plng !== "number") return false;
+
+          const dist = distanceInMeters(location.lat, location.lng, plat, plng);
+          return dist <= radiusMeters;
+        });
+
+        const mapped = filteredByDistance.map((place) => ({
           id: place.id,
           name: place.displayName?.text || "Unknown restaurant",
           rating: place.rating ?? "N/A",
@@ -217,3 +226,21 @@ function classifyServiceType(place) {
   return "Casual Dining";
 }
 
+/**
+ * Returns distance in meters.
+ */
+function distanceInMeters(lat1, lon1, lat2, lon2) {
+  const R = 6371000; // meters
+  const toRad = (v) => (v * Math.PI) / 180;
+
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) ** 2;
+
+  return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
