@@ -37,7 +37,14 @@ export default function App() {
       <div className="container">
         <header className="hero">
           <h1 className="heroTitle">
-            Where do you want 2 eat
+            <span className="heroBadgeText">
+              <img
+                src="/burgerLogo.png"
+                alt="Icon"
+                style={{ width: "60px", height: "60px" }}
+              />
+            </span>
+            Bite - Choice
             <span className="heroBadgeText">
               <img
                 src="/burgerLogo.png"
