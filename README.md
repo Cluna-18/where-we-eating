@@ -3,7 +3,7 @@
 A React + Vite web application that helps users decide where to eat by finding nearby restaurants and using a spinning wheel to make the final choice. Filters allow users to narrow results by service style, price, and distance.
 
 **Live Demo (AWS + CloudFront)**  
-bite-choice.com
+bite-choice.com 
 
 ---
 
