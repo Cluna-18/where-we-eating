@@ -1,4 +1,4 @@
-# Where Do You Want 2 Eat
+# Bite - Choice
 
 A React + Vite web application that helps users decide where to eat by finding nearby restaurants and using a spinning wheel to make the final choice. Filters allow users to narrow results by service style, price, and distance.
 
@@ -31,6 +31,7 @@ https://d2rq26roly0gsc.cloudfront.net
 ### Deployment / Infrastructure
 - AWS S3 (static website hosting)
 - AWS CloudFront (CDN and HTTPS)
+- Route 53 (Domain routing)
 - GitHub (version control)
 
 ---
