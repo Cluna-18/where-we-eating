@@ -32,6 +32,7 @@ bite-choice.com
 - AWS S3 (static website hosting)
 - AWS CloudFront (CDN and HTTPS)
 - Route 53 (Domain routing)
+- AWS Certificate Manager (SSL certificate manager)
 - GitHub (version control)
 
 ---
